@@ -329,3 +329,5 @@ const test_obj2:Author={
 merge_obj(test_obj1,test_obj2)
 console.log("\n\n")
 merge_obj(test_obj3,test_obj2)
+
+Console.log('Merge Git')
