@@ -57,7 +57,7 @@ type BookRecord = [string, string, number, BookFormat];
 
 // 10. Generics
 class Shelf<T> {
-  private items: T[] = [];
+  public items: T[] = [];
 
   addItem(item: T): void {
     this.items.push(item);
@@ -69,10 +69,12 @@ class Shelf<T> {
 }
 //#endregion
 
-
 // Assignment Tasks:
 
 //#region Question.No.1
+console.log(
+  "------------------------------------------------------------------------------------\n"
+);
 // 1. Create a function that takes an AuthoredBook and returns a formatted string
 //    Use template literals to format the output
 function ret_string(Auth_book: AuthoredBook): string {
@@ -101,10 +103,18 @@ const b: Book = {
   publicationYear: 1983,
 };
 ret_string(a);
+
+//? Total Marks: 10/10
+console.log(
+  "------------------------------------------------------------------------------------\n"
+);
 //#endregion
 
 //#region Question.No.2
 // 2. Implement a function that takes a Library and returns its keys as an array
+console.log(
+  "------------------------------------------------------------------------------------"
+);
 const library1: Library[] = [
   {
     name: "city library",
@@ -118,18 +128,41 @@ const library1: Library[] = [
 
 function lib(libr: Library): Array<[string, number]> {
   const a: [string, number][] = [[libr.name, libr.foundationYear]];
-  const text = "----QUESTION 2------";
+  const text = "\n----QUESTION 2------\n";
   console.log(text);
   console.log(a);
   return a;
 }
 lib(library1[0]);
+
+console.log("\n----QUESTION 2 FEEDBACK SOLUTION ------\n");
+
+//! Feedback Solution:
+
+function getLibraryKeys(library: Library): (keyof Library)[] {
+  return Object.keys(library) as (keyof Library)[];
+}
+const myLibrary: Library = {
+  name: "City Central Library",
+  foundationYear: 1950,
+};
+console.log(getLibraryKeys(myLibrary));
+
+console.log(
+  "------------------------------------------------------------------------------------\n"
+);
+
+//? Total Marks 0/10
+//* Comment: You were suppose to print the key in which the value is stored. Please refer to the example below.
+
 //#endregion
 
 //#region Question.No.3
 // 3. Create a function that adds a new day to the libraryHours object
 //    The function should maintain type safety
-
+console.log(
+  "------------------------------------------------------------------------------------\n"
+);
 function add_day(
   your_day: string,
   start_time: number,
@@ -147,22 +180,42 @@ function add_day(
   return new_obj;
 }
 add_day("new_day", 9, 5);
+
+console.log("\n----QUESTION 3 FEEDBACK SOLUTION ------\n");
+
+//! Feedback Solution:
+function addDay(
+  yourDay: keyof LibrarySchedule,
+  startTime: number,
+  endTime: number
+): LibrarySchedule {
+  const ObjArr = Object.keys(libraryHours);
+  if (ObjArr.length === 7) {
+    if (ObjArr.includes(yourDay)) {
+      libraryHours[yourDay] = startTime + ":00 AM -" + endTime + ":00 PM";
+    }
+  }
+  return libraryHours;
+}
+console.log(addDay("Saturday", 10, 5));
+//? Total Marks: 5/10
+//* Feedback: You needed to update the existing days. How can there be more days than 7?
+console.log(
+  "------------------------------------------------------------------------------------\n"
+);
 //#endregion
 
 //#region Question.No.4
 // 4. Implement a function that adds a book to the BookCollection
 //    Ensure that the ISBN is a valid string format (e.g., XXX-XXXXXXXXXX)
-
+console.log(
+  "------------------------------------------------------------------------------------\n"
+);
 function test_isbn(isbn: string) {
   const corr_isbn = /^[0-9]{3}-[0-9]{10}$/;
   if (corr_isbn.test(isbn)) {
     return isbn;
   }
-  //  else{
-  //   const text="isbn format is wrong"
-  //   console.log(text)
-  //   return text
-  //  }
 }
 const books: BookCollection = {};
 function add_book(
@@ -186,9 +239,17 @@ console.log(text);
 add_book("123-456789", "matilda", "roald dhal", 78);
 add_book("123-4567890989", "THE SECRET GARDEN", "roald dhal", 45);
 add_book("438-847493759475", "to kill a mocking bird", "harper lee", 23);
+
+//? Total Marks: 10/10
+console.log(
+  "------------------------------------------------------------------------------------\n"
+);
 //#endregion
 
 //#region Question.No.5
+console.log(
+  "------------------------------------------------------------------------------------\n"
+);
 // 5. Create a function that takes a Genre and returns a boolean indicating
 //    whether it's a fiction genre or not
 function genre_check(your_genre: Genre) {
@@ -211,12 +272,33 @@ const text4 = "----QUESTION 5 (checking genre)------";
 console.log(text4);
 genre_check("Fiction");
 genre_check("Non-fiction");
+
+console.log("\n----QUESTION 5 FEEDBACK SOLUTION ------\n");
+
+//! Feedback Solution:
+function genreCheck(your_genre: Genre): boolean {
+  if (your_genre === "Fiction") {
+    console.log(`${your_genre}: This is of fiction genre.`);
+    return true;
+  } else {
+    console.log(`${your_genre}: This is not of fiction genre`);
+    return false;
+  }
+}
+genreCheck("Fiction");
+genreCheck("Science");
+//? Total Marks: 5/10
+//* Feedback: Simply check whether it is fiction of not. Why are you using array parameters? Also you did not define what the function will be returning which is boolean.
+console.log(
+  "------------------------------------------------------------------------------------\n"
+);
+
 //#endregion
 
 //#region Question.No.6
 // 6. Implement a Shelf for books and another for authors
 //    Add methods to add items and retrieve all items
-
+console.log('------------------------------------------------------------------------------------\n');
 type author_based = Pick<AuthoredBook, "name" | "birthYear">;
 type book_based = Omit<AuthoredBook, "name" | "birthYear">;
 
@@ -244,6 +326,26 @@ console.log(obj2.getItem(0));
 console.log(obj2.getItem(1));
 console.log(obj2.getItem(2));
 console.log(obj2.getItem(3));
+
+console.log("\n----QUESTION 6 FEEDBACK SOLUTION ------\n");
+
+// Add methods to retrieve all items
+class EnhancedShelf<T> extends Shelf<T> {
+  getAllItems(): T[] {
+    return this.items;
+  }
+}
+const enhancedBookShelf = new EnhancedShelf<Book>();
+enhancedBookShelf.addItem({ title: "Outwitting The Devil", publicationYear: 2023 });
+console.log(enhancedBookShelf.getAllItems());
+
+const enhancedAuthorShelf = new EnhancedShelf<Author>();
+enhancedAuthorShelf.addItem({ name:"Sharon Letchter", birthYear: 1988 });
+console.log(enhancedAuthorShelf.getAllItems())
+
+//? Total Marks: 5/10
+//* Feedback: Too Much unnecessary code also the requirement wasn't met.
+console.log('------------------------------------------------------------------------------------\n');
 //#endregion
 
 //#region Question.No.7
@@ -263,6 +365,8 @@ function book_properties(book_record: BookRecord) {
   return record;
 }
 book_properties(["the light we unsee", "Eishah Nadeem", 34, "E-book"]);
+
+//? Total Marks: 10/10
 //#endregion
 
 //#region Question.No.8
@@ -283,6 +387,8 @@ function swapping(array1: any[], item1: any, item2: any): any {
 const array: any = [1, 2, "eishah", "amna"];
 console.log("----QUESTION 8-----");
 swapping(array, "eishah", "amna");
+
+//? Total Marks: 10/10
 //#endregion
 
 //#region Question.No.9
@@ -312,6 +418,7 @@ guard_func(objj);
 console.log("checking author obj");
 
 guard_func(checkk);
+//? Total Marks: 10/10
 //#endregion
 
 //#region Question.No.10
@@ -343,4 +450,8 @@ console.log("------QUESTION 10------");
 merge_obj(test_obj1, test_obj2);
 console.log("\n\n");
 merge_obj(test_obj3, test_obj2);
+
+//? Total Marks: 10/10
 //#endregion
+
+//! TOTAL MARKS: 75/100, Grade: B
